@@ -14,7 +14,8 @@
 int main()
 {
     int sockfd;
-    int *number = malloc(sizeof(int));
+    int *number1 = malloc(sizeof(int));
+    int *number2 = malloc(sizeof(int));
     int *response = malloc(sizeof(int));
     struct sockaddr_in servaddr;
 
@@ -34,13 +35,21 @@ int main()
 
     int n, len;
 
-    printf("\nSet a number please: ");
-    scanf("%d", number);
+    printf("\nSet number 1 please: ");
+    scanf("%d", number1);
 
-    sendto(sockfd, (int *)number, sizeof(number),
+    sendto(sockfd, (int *)number1, sizeof(number1),
            MSG_CONFIRM, (const struct sockaddr *)&servaddr,
            sizeof(servaddr));
-    printf("\nNumber sent.\n");
+    printf("\nNumber 1 sent.\n");
+
+    printf("\nSet number 2 please: ");
+    scanf("%d", number2);
+
+     sendto(sockfd, (int *)number2, sizeof(number2),
+           MSG_CONFIRM, (const struct sockaddr *)&servaddr,
+           sizeof(servaddr));
+    printf("\nNumber 2 sent.\n");
 
     n = recvfrom(sockfd, (int *)response, sizeof(response),
                  MSG_WAITALL, (struct sockaddr *)&servaddr,

@@ -15,7 +15,8 @@
 int main()
 {
     int sockfd;
-    int *number = malloc(sizeof(int));
+    int *number1 = malloc(sizeof(int));
+     int *number2 = malloc(sizeof(int));
     char *answer_number = malloc(sizeof(int));
     struct sockaddr_in servaddr, cliaddr;
 
@@ -46,12 +47,19 @@ int main()
 
     len = sizeof(cliaddr); //len is value/resuslt
 
-    n = recvfrom(sockfd, (int *)number, sizeof(number),
+    n = recvfrom(sockfd, (int *)number1, sizeof(number1),
                  MSG_WAITALL, (struct sockaddr *)&cliaddr,
                  &len);
 
-    printf("Client : %d\n", *number);
-    *answer_number = *number * 2;
+    printf("Number 1 : %d\n", *number1);
+
+    n = recvfrom(sockfd, (int *)number2, sizeof(number2),
+                 MSG_WAITALL, (struct sockaddr *)&cliaddr,
+                 &len);
+
+    printf("Number 2 : %d\n", *number2);
+
+    *answer_number = *number1 + *number2;
     sendto(sockfd, (int *)answer_number, sizeof(answer_number),
            MSG_CONFIRM, (const struct sockaddr *)&cliaddr,
            len);
