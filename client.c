@@ -37,7 +37,9 @@ int main()
 
     int n, len;
 
-    printf("\nSet number 1 please: ");
+    *solution = 0;
+    printf("Valor de la solunion inicial %d\n\n", *solution);
+    printf("Set number 1 please: ");
     scanf("%d", number1);
 
     sendto(sockfd, (int *)number1, sizeof(number1),
@@ -64,7 +66,7 @@ int main()
     recvfrom(sockfd, (int *)solution, sizeof(solution),
              MSG_WAITALL, (struct sockaddr *)&servaddr,
              &len);
-             
+
     printf("\nServer solution: %d\n", *solution);
 
     close(sockfd);

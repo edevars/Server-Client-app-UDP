@@ -44,17 +44,18 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    int len, n;
+    int len;
 
     len = sizeof(cliaddr); //len is value/resuslt
 
-    n = recvfrom(sockfd, (int *)number1, sizeof(number1),
+    printf("Server listening in port %d\n\n",PORT);
+    recvfrom(sockfd, (int *)number1, sizeof(number1),
                  MSG_WAITALL, (struct sockaddr *)&cliaddr,
                  &len);
 
     printf("Number 1 : %d\n", *number1);
 
-    n = recvfrom(sockfd, (int *)number2, sizeof(number2),
+    recvfrom(sockfd, (int *)number2, sizeof(number2),
                  MSG_WAITALL, (struct sockaddr *)&cliaddr,
                  &len);
 
