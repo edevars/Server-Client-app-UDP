@@ -1,5 +1,3 @@
-
-// Server side implementation of UDP client-server model
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -10,7 +8,7 @@
 #include <netinet/in.h>
 
 #define PORT 8080
-#define MAX_MESSAGE_LENGTH 100
+#define MAX_MESSAGE_LENGTH 200
 
 // Driver code
 int main()
@@ -19,7 +17,7 @@ int main()
     int *number1 = malloc(sizeof(int));
     int *number2 = malloc(sizeof(int));
     int *solution = malloc(sizeof(int));
-    char *message = malloc( sizeof(char) * MAX_MESSAGE_LENGTH);
+    char *message = malloc(sizeof(char) * MAX_MESSAGE_LENGTH);
     struct sockaddr_in servaddr, cliaddr;
 
     // Creating socket file descriptor
@@ -51,7 +49,10 @@ int main()
 
     do
     {
-        printf("Server listening in port %d\n\n", PORT);
+        *number1 = 0;
+        *number2 = 0;
+
+        printf("\n\nServer listening in port %d\n\n", PORT);
         recvfrom(sockfd, (int *)number1, sizeof(number1),
                  MSG_WAITALL, (struct sockaddr *)&cliaddr,
                  &len);
@@ -66,15 +67,15 @@ int main()
 
         *solution = (*number1 * *number1) + (*number2 * *number2);
 
-        memset( message, 0x00, MAX_MESSAGE_LENGTH );
+        memset(message, 0x00, MAX_MESSAGE_LENGTH);
 
         if (*solution >= 100)
         {
-            message = "Datos incorrectos\0";
+            message = "Sorry! Wrong data introduced";
         }
         else
         {
-            message = "Datos correctos\0";
+            message = "Ok, the sum of the power of both numbers is less than 100";
         }
 
         sendto(sockfd, (const char *)message, strlen(message),

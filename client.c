@@ -1,4 +1,3 @@
-// Client side implementation of UDP client-server model
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -9,7 +8,7 @@
 #include <netinet/in.h>
 
 #define PORT 8080
-#define MAX_MESSAGE_LENGTH 100
+#define MAX_MESSAGE_LENGTH 200
 
 // Driver code
 int main()
@@ -38,8 +37,7 @@ int main()
     int n, len;
 
     do
-    {
-        printf("Valor de la solunion inicial %d\n\n", *solution);
+    {   *solution = 0;
         printf("Set number 1 please: ");
         scanf("%d", number1);
 
@@ -62,13 +60,14 @@ int main()
 
         response[n] = '\0';
 
-        printf("\n\nServer response message: %s\n", response);
+        printf("\n\nSERVER MESSAGES");
+        printf("\nResponse message: %s", response);
 
         recvfrom(sockfd, (int *)solution, sizeof(solution),
                  MSG_WAITALL, (struct sockaddr *)&servaddr,
                  &len);
 
-        printf("\nServer solution: %d\n", *solution);
+        printf("\nSolution: %d\n", *solution);
     } while (*solution >= 100);
 
     close(sockfd);
