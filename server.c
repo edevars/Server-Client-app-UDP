@@ -16,8 +16,8 @@ int main()
 {
     int sockfd;
     int *number1 = malloc(sizeof(int));
-     int *number2 = malloc(sizeof(int));
-    char *answer_number = malloc(sizeof(int));
+    int *number2 = malloc(sizeof(int));
+    char *message = "Datos correctos";
     struct sockaddr_in servaddr, cliaddr;
 
     // Creating socket file descriptor
@@ -59,8 +59,7 @@ int main()
 
     printf("Number 2 : %d\n", *number2);
 
-    *answer_number = *number1 + *number2;
-    sendto(sockfd, (int *)answer_number, sizeof(answer_number),
+    sendto(sockfd, (const char *)message, strlen(message),
            MSG_CONFIRM, (const struct sockaddr *)&cliaddr,
            len);
     printf("Response sent.\n");

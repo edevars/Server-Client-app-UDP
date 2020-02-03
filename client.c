@@ -9,6 +9,7 @@
 #include <netinet/in.h>
 
 #define PORT 8080
+#define MAX_MESSAGE_LENGTH 100
 
 // Driver code
 int main()
@@ -16,7 +17,7 @@ int main()
     int sockfd;
     int *number1 = malloc(sizeof(int));
     int *number2 = malloc(sizeof(int));
-    int *response = malloc(sizeof(int));
+    char *response [MAX_MESSAGE_LENGTH];
     struct sockaddr_in servaddr;
 
     // Creating socket file descriptor
@@ -41,7 +42,7 @@ int main()
     sendto(sockfd, (int *)number1, sizeof(number1),
            MSG_CONFIRM, (const struct sockaddr *)&servaddr,
            sizeof(servaddr));
-    printf("\nNumber 1 sent.\n");
+    printf("\nNumber 1 sent.");
 
     printf("\nSet number 2 please: ");
     scanf("%d", number2);
@@ -49,13 +50,15 @@ int main()
      sendto(sockfd, (int *)number2, sizeof(number2),
            MSG_CONFIRM, (const struct sockaddr *)&servaddr,
            sizeof(servaddr));
-    printf("\nNumber 2 sent.\n");
+    printf("Number 2 sent.\n");
 
-    n = recvfrom(sockfd, (int *)response, sizeof(response),
+    n = recvfrom(sockfd, (char *)response, MAX_MESSAGE_LENGTH,
                  MSG_WAITALL, (struct sockaddr *)&servaddr,
                  &len);
 
-    printf("Server : %d\n", *response);
+    response[n] = '\0'; 
+
+    printf("Server : %s\n", response);
 
     close(sockfd);
     return 0;
