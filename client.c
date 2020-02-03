@@ -17,7 +17,8 @@ int main()
     int sockfd;
     int *number1 = malloc(sizeof(int));
     int *number2 = malloc(sizeof(int));
-    char *response [MAX_MESSAGE_LENGTH];
+    int *solution = malloc(sizeof(int));
+    char *response[MAX_MESSAGE_LENGTH];
     struct sockaddr_in servaddr;
 
     // Creating socket file descriptor
@@ -42,23 +43,29 @@ int main()
     sendto(sockfd, (int *)number1, sizeof(number1),
            MSG_CONFIRM, (const struct sockaddr *)&servaddr,
            sizeof(servaddr));
-    printf("\nNumber 1 sent.");
+    printf("Number 1 sent.");
 
-    printf("\nSet number 2 please: ");
+    printf("\n\nSet number 2 please: ");
     scanf("%d", number2);
 
-     sendto(sockfd, (int *)number2, sizeof(number2),
+    sendto(sockfd, (int *)number2, sizeof(number2),
            MSG_CONFIRM, (const struct sockaddr *)&servaddr,
            sizeof(servaddr));
-    printf("Number 2 sent.\n");
+    printf("Number 2 sent.");
 
     n = recvfrom(sockfd, (char *)response, MAX_MESSAGE_LENGTH,
                  MSG_WAITALL, (struct sockaddr *)&servaddr,
                  &len);
 
-    response[n] = '\0'; 
+    response[n] = '\0';
 
-    printf("Server : %s\n", response);
+    printf("\n\nServer response message: %s\n", response);
+
+    recvfrom(sockfd, (int *)solution, sizeof(solution),
+             MSG_WAITALL, (struct sockaddr *)&servaddr,
+             &len);
+             
+    printf("\nServer solution: %d\n", *solution);
 
     close(sockfd);
     return 0;

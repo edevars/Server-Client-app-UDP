@@ -17,6 +17,7 @@ int main()
     int sockfd;
     int *number1 = malloc(sizeof(int));
     int *number2 = malloc(sizeof(int));
+    int *solution = malloc(sizeof(int));
     char *message = "Datos correctos";
     struct sockaddr_in servaddr, cliaddr;
 
@@ -62,7 +63,16 @@ int main()
     sendto(sockfd, (const char *)message, strlen(message),
            MSG_CONFIRM, (const struct sockaddr *)&cliaddr,
            len);
-    printf("Response sent.\n");
+
+    printf("\nResponse sent: %s", message);
+
+    *solution = (*number1 * *number1) + (*number2 * *number2);
+
+    sendto(sockfd, (int *)solution, sizeof(solution),
+           MSG_CONFIRM, (const struct sockaddr *)&cliaddr,
+           len);
+
+    printf("\nSolution sent: %d \n", *solution);
 
     return 0;
 }
