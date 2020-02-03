@@ -37,37 +37,39 @@ int main()
 
     int n, len;
 
-    *solution = 0;
-    printf("Valor de la solunion inicial %d\n\n", *solution);
-    printf("Set number 1 please: ");
-    scanf("%d", number1);
+    do
+    {
+        printf("Valor de la solunion inicial %d\n\n", *solution);
+        printf("Set number 1 please: ");
+        scanf("%d", number1);
 
-    sendto(sockfd, (int *)number1, sizeof(number1),
-           MSG_CONFIRM, (const struct sockaddr *)&servaddr,
-           sizeof(servaddr));
-    printf("Number 1 sent.");
+        sendto(sockfd, (int *)number1, sizeof(number1),
+               MSG_CONFIRM, (const struct sockaddr *)&servaddr,
+               sizeof(servaddr));
+        printf("Number 1 sent.");
 
-    printf("\n\nSet number 2 please: ");
-    scanf("%d", number2);
+        printf("\n\nSet number 2 please: ");
+        scanf("%d", number2);
 
-    sendto(sockfd, (int *)number2, sizeof(number2),
-           MSG_CONFIRM, (const struct sockaddr *)&servaddr,
-           sizeof(servaddr));
-    printf("Number 2 sent.");
+        sendto(sockfd, (int *)number2, sizeof(number2),
+               MSG_CONFIRM, (const struct sockaddr *)&servaddr,
+               sizeof(servaddr));
+        printf("Number 2 sent.");
 
-    n = recvfrom(sockfd, (char *)response, MAX_MESSAGE_LENGTH,
+        n = recvfrom(sockfd, (char *)response, MAX_MESSAGE_LENGTH,
+                     MSG_WAITALL, (struct sockaddr *)&servaddr,
+                     &len);
+
+        response[n] = '\0';
+
+        printf("\n\nServer response message: %s\n", response);
+
+        recvfrom(sockfd, (int *)solution, sizeof(solution),
                  MSG_WAITALL, (struct sockaddr *)&servaddr,
                  &len);
 
-    response[n] = '\0';
-
-    printf("\n\nServer response message: %s\n", response);
-
-    recvfrom(sockfd, (int *)solution, sizeof(solution),
-             MSG_WAITALL, (struct sockaddr *)&servaddr,
-             &len);
-
-    printf("\nServer solution: %d\n", *solution);
+        printf("\nServer solution: %d\n", *solution);
+    } while (*solution >= 100);
 
     close(sockfd);
     return 0;

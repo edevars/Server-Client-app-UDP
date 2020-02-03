@@ -10,6 +10,7 @@
 #include <netinet/in.h>
 
 #define PORT 8080
+#define MAX_MESSAGE_LENGTH 100
 
 // Driver code
 int main()
@@ -18,7 +19,7 @@ int main()
     int *number1 = malloc(sizeof(int));
     int *number2 = malloc(sizeof(int));
     int *solution = malloc(sizeof(int));
-    char *message = "Datos correctos";
+    char *message = malloc( sizeof(char) * MAX_MESSAGE_LENGTH);
     struct sockaddr_in servaddr, cliaddr;
 
     // Creating socket file descriptor
@@ -48,32 +49,46 @@ int main()
 
     len = sizeof(cliaddr); //len is value/resuslt
 
-    printf("Server listening in port %d\n\n",PORT);
-    recvfrom(sockfd, (int *)number1, sizeof(number1),
+    do
+    {
+        printf("Server listening in port %d\n\n", PORT);
+        recvfrom(sockfd, (int *)number1, sizeof(number1),
                  MSG_WAITALL, (struct sockaddr *)&cliaddr,
                  &len);
 
-    printf("Number 1 : %d\n", *number1);
+        printf("Number 1 : %d\n", *number1);
 
-    recvfrom(sockfd, (int *)number2, sizeof(number2),
+        recvfrom(sockfd, (int *)number2, sizeof(number2),
                  MSG_WAITALL, (struct sockaddr *)&cliaddr,
                  &len);
 
-    printf("Number 2 : %d\n", *number2);
+        printf("Number 2 : %d\n", *number2);
 
-    sendto(sockfd, (const char *)message, strlen(message),
-           MSG_CONFIRM, (const struct sockaddr *)&cliaddr,
-           len);
+        *solution = (*number1 * *number1) + (*number2 * *number2);
 
-    printf("\nResponse sent: %s", message);
+        memset( message, 0x00, MAX_MESSAGE_LENGTH );
 
-    *solution = (*number1 * *number1) + (*number2 * *number2);
+        if (*solution >= 100)
+        {
+            message = "Datos incorrectos\0";
+        }
+        else
+        {
+            message = "Datos correctos\0";
+        }
 
-    sendto(sockfd, (int *)solution, sizeof(solution),
-           MSG_CONFIRM, (const struct sockaddr *)&cliaddr,
-           len);
+        sendto(sockfd, (const char *)message, strlen(message),
+               MSG_CONFIRM, (const struct sockaddr *)&cliaddr,
+               len);
 
-    printf("\nSolution sent: %d \n", *solution);
+        printf("\nResponse sent: %s", message);
+
+        sendto(sockfd, (int *)solution, sizeof(solution),
+               MSG_CONFIRM, (const struct sockaddr *)&cliaddr,
+               len);
+
+        printf("\nSolution sent: %d \n", *solution);
+    } while (*solution >= 100);
 
     return 0;
 }
