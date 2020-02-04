@@ -18,6 +18,7 @@ int main()
     int *number2 = malloc(sizeof(int));
     int *solution = malloc(sizeof(int));
     char *response[MAX_MESSAGE_LENGTH];
+    int attempts = 0;
     struct sockaddr_in servaddr;
 
     // Creating socket file descriptor
@@ -38,6 +39,10 @@ int main()
 
     do
     {   *solution = 0;
+
+        if(attempts > 0){
+            printf("\n\nTry again!\n");
+        }
         printf("Set number 1 please: ");
         scanf("%d", number1);
 
@@ -68,6 +73,7 @@ int main()
                  &len);
 
         printf("\nSolution: %d\n", *solution);
+        attempts ++;
     } while (*solution >= 100);
 
     close(sockfd);

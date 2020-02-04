@@ -51,6 +51,7 @@ int main()
     {
         *number1 = 0;
         *number2 = 0;
+        *solution = 0;
 
         printf("\n\nServer listening in port %d\n\n", PORT);
         recvfrom(sockfd, (int *)number1, sizeof(number1),
@@ -66,8 +67,7 @@ int main()
         printf("Number 2 : %d\n", *number2);
 
         *solution = (*number1 * *number1) + (*number2 * *number2);
-
-        memset(message, 0x00, MAX_MESSAGE_LENGTH);
+        
 
         if (*solution >= 100)
         {
@@ -82,6 +82,7 @@ int main()
                MSG_CONFIRM, (const struct sockaddr *)&cliaddr,
                len);
 
+        printf("\n\nDATA SENT");   
         printf("\nResponse sent: %s", message);
 
         sendto(sockfd, (int *)solution, sizeof(solution),
