@@ -42,7 +42,11 @@ int main()
         sendto(sockfd, (char *)word, strlen(word),
                MSG_CONFIRM, (const struct sockaddr *)&servaddr,
                sizeof(servaddr));
-    }
 
-    return 0;
+        if(strcmp(word,"stop") == 0){
+            close(sockfd);
+            return 0;
+        }
+
+    }
 }

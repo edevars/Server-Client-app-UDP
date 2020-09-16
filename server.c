@@ -49,12 +49,13 @@ int main()
         recvfrom(sockfd, (char *)word, MAX_MESSAGE_LENGTH,
                      MSG_WAITALL, (struct sockaddr *)&servaddr,
                      &len);
-                     
-        strcat(message, word);
-        strcat (message, ",");
-        
-        printf("Final message : %s\n", message);
-    }
 
-    return 0;
+        if(strcmp(word,"stop") == 0){
+            printf("All the words: %s\n", message);
+            return 0;
+        }else{
+            strcat(message, word);
+            strcat (message, ",");
+        }
+    }
 }
