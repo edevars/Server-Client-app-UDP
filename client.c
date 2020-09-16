@@ -8,17 +8,16 @@
 #include <netinet/in.h>
 
 #define PORT 8080
-#define MAX_MESSAGE_LENGTH 200
+// Only 2kb message
+#define MAX_MESSAGE_LENGTH 2048
 
 // Driver code
 int main()
 {
     int sockfd;
-    int *number1 = malloc(sizeof(int));
-    int *number2 = malloc(sizeof(int));
-    int *solution = malloc(sizeof(int));
-    char *response[MAX_MESSAGE_LENGTH];
-    int attempts = 0;
+    char *word;
+    word = (char *)malloc(sizeof(char) * (50));
+    char *words_stack[MAX_MESSAGE_LENGTH];
     struct sockaddr_in servaddr;
 
     // Creating socket file descriptor
@@ -37,45 +36,13 @@ int main()
 
     int n, len;
 
-    do
-    {   *solution = 0;
+    printf("Write a word please: ");
+    scanf("%s", word);
+    printf("The word that you write is: %s\n", word);
+    // sendto(sockfd, (const char *)word, sizeof(word),
+    //        MSG_CONFIRM, (const struct sockaddr *)&servaddr,
+    //        sizeof(servaddr));
+    // printf("Word 1 sent.");
 
-        if(attempts > 0){
-            printf("\n\nTry again!\n");
-        }
-        printf("Set number 1 please: ");
-        scanf("%d", number1);
-
-        sendto(sockfd, (int *)number1, sizeof(number1),
-               MSG_CONFIRM, (const struct sockaddr *)&servaddr,
-               sizeof(servaddr));
-        printf("Number 1 sent.");
-
-        printf("\n\nSet number 2 please: ");
-        scanf("%d", number2);
-
-        sendto(sockfd, (int *)number2, sizeof(number2),
-               MSG_CONFIRM, (const struct sockaddr *)&servaddr,
-               sizeof(servaddr));
-        printf("Number 2 sent.");
-
-        n = recvfrom(sockfd, (char *)response, MAX_MESSAGE_LENGTH,
-                     MSG_WAITALL, (struct sockaddr *)&servaddr,
-                     &len);
-
-        response[n] = '\0';
-
-        printf("\n\nSERVER MESSAGES");
-        printf("\nResponse message: %s", response);
-
-        recvfrom(sockfd, (int *)solution, sizeof(solution),
-                 MSG_WAITALL, (struct sockaddr *)&servaddr,
-                 &len);
-
-        printf("\nSolution: %d\n", *solution);
-        attempts ++;
-    } while (*solution >= 100);
-
-    close(sockfd);
     return 0;
 }
