@@ -9,15 +9,13 @@
 
 #define PORT 8080
 // Only 2kb message
-#define MAX_MESSAGE_LENGTH 2048
+#define MAX_MESSAGE_LENGTH 200
 
 // Driver code
 int main()
 {
     int sockfd;
-    char *word;
-    word = (char *)malloc(sizeof(char) * (50));
-    char *words_stack[MAX_MESSAGE_LENGTH];
+    char *word = malloc(sizeof(char) * MAX_MESSAGE_LENGTH);
     struct sockaddr_in servaddr;
 
     // Creating socket file descriptor
@@ -34,15 +32,17 @@ int main()
     servaddr.sin_port = htons(PORT);
     servaddr.sin_addr.s_addr = INADDR_ANY;
 
-    int n, len;
+    // sending the word
+    while (1)
+    {
 
-    printf("Write a word please: ");
-    scanf("%s", word);
-    printf("The word that you write is: %s\n", word);
-    // sendto(sockfd, (const char *)word, sizeof(word),
-    //        MSG_CONFIRM, (const struct sockaddr *)&servaddr,
-    //        sizeof(servaddr));
-    // printf("Word 1 sent.");
+        printf("Write a word please: ");
+        scanf("%s", word);
+
+        sendto(sockfd, (char *)word, strlen(word),
+               MSG_CONFIRM, (const struct sockaddr *)&servaddr,
+               sizeof(servaddr));
+    }
 
     return 0;
 }
