@@ -11,12 +11,32 @@
 #define MAX_WORD_LENGTH 200
 #define WORDS_LEN 100
 
+void bubbleSort(char words[][MAX_WORD_LENGTH], int n) 
+{ 
+    char temp[MAX_WORD_LENGTH]; 
+  
+    // Sorting strings using bubble sort 
+    int i , j;
+    for (j=0; j<n-1; j++) 
+    { 
+        for (i=j+1; i<n; i++) 
+        { 
+            if (strcmp(words[j], words[i]) > 0) 
+            { 
+                strcpy(temp, words[j]); 
+                strcpy(words[j], words[i]); 
+                strcpy(words[i], temp); 
+            } 
+        } 
+    } 
+} 
+
 int main()
 {
     int sockfd;
     struct sockaddr_in servaddr, cliaddr;
     char words[WORDS_LEN][MAX_WORD_LENGTH];
-    int c = 0;
+    int words_counter = 0;
 
     // Creating socket file descriptor
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
@@ -54,18 +74,16 @@ int main()
         if (strcmp(word, "stop") == 0)
         {
             int i;
-
-            for (i = 0; i < c; i++)
-            {
-                printf("Words %d: %s\n", i + 1, words[i]);
-            }
+            bubbleSort(words, words_counter); 
+            for (i = 0; i < words_counter; i++)
+                printf("Word %d: %s\n", i + 1, words[i]);
 
             return 0;
         }
         else
         {
-            strcpy(words[c], word);
-            c++;
+            strcpy(words[words_counter], word);
+            words_counter++;
         }
     }
 }
