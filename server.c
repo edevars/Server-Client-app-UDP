@@ -8,14 +8,15 @@
 #include <netinet/in.h>
 
 #define PORT 8080
-#define MAX_MESSAGE_LENGTH 200
+#define MAX_WORD_LENGTH 200
+#define WORDS_LEN 100
 
-// Driver code
 int main()
 {
     int sockfd;
     struct sockaddr_in servaddr, cliaddr;
-    char message[10000] = ""; 
+    char words[WORDS_LEN][MAX_WORD_LENGTH];
+    int c = 0;
 
     // Creating socket file descriptor
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
@@ -40,22 +41,31 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    int n, len;
+    int len;
 
     printf("\n\nServer listening in port %d\n\n", PORT);
     while (1)
     {
-        char *word = malloc(sizeof(char) * MAX_MESSAGE_LENGTH);
-        recvfrom(sockfd, (char *)word, MAX_MESSAGE_LENGTH,
-                     MSG_WAITALL, (struct sockaddr *)&servaddr,
-                     &len);
+        char *word = malloc(sizeof(char) * MAX_WORD_LENGTH);
+        recvfrom(sockfd, (char *)word, MAX_WORD_LENGTH,
+                 MSG_WAITALL, (struct sockaddr *)&servaddr,
+                 &len);
 
-        if(strcmp(word,"stop") == 0){
-            printf("All the words: %s\n", message);
+        if (strcmp(word, "stop") == 0)
+        {
+            int i;
+
+            for (i = 0; i < c; i++)
+            {
+                printf("Words %d: %s\n", i + 1, words[i]);
+            }
+
             return 0;
-        }else{
-            strcat(message, word);
-            strcat (message, ",");
+        }
+        else
+        {
+            strcpy(words[c], word);
+            c++;
         }
     }
 }

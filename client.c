@@ -9,13 +9,13 @@
 
 #define PORT 8080
 // Only 2kb message
-#define MAX_MESSAGE_LENGTH 200
+#define MAX_WORD_LENGTH 200
 
 // Driver code
 int main()
 {
     int sockfd;
-    char *word = malloc(sizeof(char) * MAX_MESSAGE_LENGTH);
+    char word[MAX_WORD_LENGTH];
     struct sockaddr_in servaddr;
 
     // Creating socket file descriptor
